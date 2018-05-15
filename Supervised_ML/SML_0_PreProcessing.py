@@ -194,6 +194,11 @@ text_df['text_nopunkt_lemmas'] = pd.Series(["".join(x) for x in text_df['text_no
 ### We should have everything in place now for some supervised ML fun!
 
 
+#### SAVE DATA ----------------------------------------------------------------
+
+text_df.to_csv('/Users/alessia/Documents/DataScience/NLP_Project/Outputs/semeval2017_preproc.csv')
+
+
 
 ### (4) Vectorisation & Document-Term-Matrix ----------------------------------
 

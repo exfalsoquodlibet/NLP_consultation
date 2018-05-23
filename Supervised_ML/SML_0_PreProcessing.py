@@ -182,7 +182,7 @@ text_df['text_nopunkt_lemmas_b'] = text_df['text2_nopunkt_lemmas'].apply(lambda 
 
 text_df['text_nopunkt_lemmas_c'] = text_df['text_nopunkt_lemmas_b'].apply(lambda x: b_nlp.list2string_df(x))
 
-text_df['text_nopunkt_lemmas'] = pd.Series(["".join(x) for x in text_df['text_nopunkt_lemmas_c']], index=text_df.index)
+text_df['text_nopunkt_lemmas'] = pd.Series([" ".join(x) for x in text_df['text_nopunkt_lemmas_c']], index=text_df.index)
 
 
 

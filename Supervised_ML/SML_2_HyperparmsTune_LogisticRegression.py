@@ -201,6 +201,30 @@ for mean_score, params in zip(cv_results["mean_test_score"], cv_results["params"
 
 ### Evaluation ---------------
 
+vec = CountVectorizer(analyzer="word",
+                      stop_words='english',
+                      ngram_range = (1, 3),
+                      max_features = 9000,
+                      tokenizer=word_tokenize
+                      )
+
+# vec.get_params().keys()
+
+lr = LogisticRegression(C =1, penalty='l1')
+
+
+# Instantiate pipeline
+
+best_pipe_lr_clf = Pipeline([
+        
+        ('vectorizer', vec),
+        
+        ('classifier', lr)
+        
+        ])
+
+
+
 # Let's predict from the "best model"
 pipe_lr_clf_cv.score(X_test, y_test)    #testing accuracy
 
@@ -215,7 +239,7 @@ print(confusion_matrix(y_true = y_test, y_pred = y_predictions))
 y_pred_prob = pipe_lr_clf_cv.predict_proba(X_test)[:,1]
 print(y_pred_prob)
 
-# AUC value
+# AUC value (best)
 print(roc_auc_score(y_test, y_pred_prob))
 
 # Generate ROC curve values: fpr, tpr, thresholds
@@ -230,7 +254,8 @@ plt.title('ROC Curve')
 plt.show()
 
 
-
+# calculate log_loss based on prediction probability and true value 
+# (check TM's code)
 
 
 

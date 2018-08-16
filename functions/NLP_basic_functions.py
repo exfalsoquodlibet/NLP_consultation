@@ -39,41 +39,12 @@ dir(utils)
 
 
 
-######## dummy data
-
-# string
-mystring = 'I do not care. I think. Maybe not'
-
-# pandas.DataFrame
-data = {'par_text': ['', "I don't care. I think. Maybe not.", 'I ate too much! Burb...', 'I can see why', 'Hahaha. This is a no-brainer'], 
-        'id' : [111, 222, 333, 444, 555]}
-df = pd.DataFrame(data)
-
-
 
 
 
 ##############################################
 ### Function to sentence-tokenise text    ####
 ##############################################
-
-
-def sent_tokenise_original(INPUT) :
-    
-    """ 
-    Function to sentence-tokenise a text paragraph of any sentence length.
-    Return a list of string sentences.
-    
-    Parameters
-    ----------
-    INPUT : name of the dataframe column or string that contains the paragraph text to be sentence-tokenised.
-    OUTPUT: 
-    """
-    
-    # if no answer was provided -> return empty string list, else sent-tokenize answer
-    OUTPUT = sent_tokenize(INPUT) if (INPUT and isinstance(INPUT, str)) else list()
-            
-    return OUTPUT
 
 
 
@@ -98,7 +69,7 @@ def sent_tokenise(string_par) :
 
 
 ##############################################
-### Function to word-tokenise senences    ####
+### Function to word-tokenise sentences    ####
 ##############################################
 
 

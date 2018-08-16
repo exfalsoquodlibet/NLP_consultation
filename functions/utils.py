@@ -8,7 +8,6 @@ Created on Mon Jul  9 13:36:32 2018
 
 
 import pandas as pd
-import functools    
 
 
 
@@ -47,41 +46,40 @@ def string_to_series_out(func):
 
 
 ###############################################################################
-#### Function to combine funcions into a pipeline of functions ################
+#### Function to combine functions into a pipeline of functions ################
 ###############################################################################
     
+import functools
 
 # Ref. for functolls.reduce: # https://docs.python.org/3/library/functools.html#functools.reduce
+    
+  
+def combine_2fs(f, g):
+    '''
+    Function to chain two functions. 
+    '''
+    return lambda *args, **kwargs: g(f(*args), **kwargs)
+
 
 def combine_functions(*f_args):
-    
-    if len(f_args) == 1:          # only one function was provided
-        first_func = f_args[0]
-        return first_func  
-   
-    def combine(f, g):
-        return lambda x: f(g(x))
-    
-    return functools.reduce(combine, f_args, lambda x: x)
-    
+    '''
+    Function to combine an n-th number of function together.
+    First to last function to apply from left to right. I.e., f, g for g(f(x))
+    '''
+    return functools.reduce(combine_2fs, f_args, lambda x: x)
+
+
 
 
 ### This one works on strings and returns a pd.Series
-def combine_functions_output_series(*f_args):
     
-    def combine(f, g):
-        return lambda x: f(g(x))
-    
-    def output_series(x):
+def output_series(x):
         return pd.Series(dict(outcome = x))
-        
-    #if len(f_args) == 1:          # only one function was provided
-    #    first_func = f_args[0]
-    #    list_funcs = [output_series first_func] 
-    #    return functools.reduce(combine, list_funcs, lambda x:x)
-    
+
+def combine_functions_output_series(*f_args):
+     
     tuple_funcs = (output_series, ) + f_args
-    return functools.reduce(combine, tuple_funcs, lambda x:x)
+    return functools.reduce(combine_2fs, tuple_funcs, lambda x:x)
 
 
 
@@ -138,6 +136,7 @@ def flattenIrregularListOfLists(l):
         else:
             yield el
  
+    
     
     
 

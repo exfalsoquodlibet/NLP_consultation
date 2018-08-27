@@ -8,6 +8,9 @@ Created on Mon Jul  9 13:36:32 2018
 
 
 import pandas as pd
+import numpy as np
+from sklearn.base import BaseEstimator, TransformerMixin
+
 
 
 
@@ -122,7 +125,7 @@ def list2string(list_of_strings) :
 
 
 #####################################################
-#### Function to flaten irregular lists of lists ####
+#### Function to flatten irregular lists of lists ####
 #####################################################
 
 
@@ -139,6 +142,58 @@ def flattenIrregularListOfLists(l):
     
     
     
+####################################################################################
+#### Transformers to apply chain of function featurizers in a sklearn pipeline #####
+####################################################################################            
+    
+class list2array_TextFunctionFeaturizer(BaseEstimator, TransformerMixin):
+    """
+    https://dreisbach.us/articles/building-scikit-learn-compatible-transformers/
+    Takes a list of functions, calls each function with our text, and returns the results of all functions as a feature vector
+    """
+    
+    def __init__(self, *featurizers):
+        self.featurizers = featurizers
+
+    def fit(self, X, y=None):
+        """All SciKit-Learn compatible transformers and classifiers have the
+        same interface. `fit` always returns the same object."""
+        return self
+
+    def transform(self, X):
+        """Given a list of original data, return an array of list of feature vectors."""
+        fvs = []
+        for datum in X:
+            fv = [f(datum) for f in self.featurizers]
+            fvs.append(fv)
+        return np.array(fvs)
+
+
+
+class list2list_TextFunctionFeaturizer(BaseEstimator, TransformerMixin):
+    """
+    Modified from:
+    https://dreisbach.us/articles/building-scikit-learn-compatible-transformers/
+    Takes a list of functions, calls each function with our list of lists, 
+    and returns the results of all functions as a feature vector.
+    """
+    
+    def __init__(self, *featurizers):
+        self.featurizers = featurizers
+
+    def fit(self, X, y=None):
+        """All SciKit-Learn compatible transformers and classifiers have the
+        same interface. `fit` always returns the same object."""
+        return self
+
+    def transform(self, X):
+        """Given a list of lists of original data, return a list of feature vectors."""
+        fvs = []
+        for datum in X:
+            [fv] = [f(datum) for f in self.featurizers]
+            fvs.append(fv)
+        return np.array(fvs)
+
 
 
 
